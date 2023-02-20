@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+  <title>Simple Flask Starter</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+</head>
+
+<body>
+  <h3>Simple Flask Starter</h3>
+  <div class="container">
+    <div class="left">
+      <b>Request</b>
+      <textarea id="request">{"name":"world"}</textarea>
+      <button id="submit">Submit</button>
+    </div>
+    <div class="left">
+      <b>Response</b>
+      <textarea id="response"></textarea>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='main.js') }}" ></script>
+</body>
