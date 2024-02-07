@@ -1,15 +1,22 @@
 from flask import Flask, request, jsonify, render_template
-
-app = Flask(__name__)
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 
 class Config(object):
     # Other configurations
-    SQLALCHEMY_DATABASE_URI = 'postgresql://testuser:password@localhost/mydatabase'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
+app = Flask(__name__)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
 # when a request to base url happens (either GET or POST) return the index.html page
+
+
 @app.route("/", methods=("GET", "POST"))
 def index():
     # List of dummy articles
