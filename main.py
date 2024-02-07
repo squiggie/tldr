@@ -1,7 +1,13 @@
 from flask import Flask, request, jsonify, render_template
-from app.handle_greeting import handle_greeting
 
 app = Flask(__name__)
+
+
+class Config(object):
+    # Other configurations
+    SQLALCHEMY_DATABASE_URI = 'postgresql://testuser:password@localhost/mydatabase'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
 
 # when a request to base url happens (either GET or POST) return the index.html page
 @app.route("/", methods=("GET", "POST"))
@@ -37,8 +43,10 @@ def index():
     # Pass the articles list to the template
     return render_template('index.html', articles=articles)
 
-# When a request to url /test happens 
+# When a request to url /test happens
 # and if the method is a POST then return a response
+
+
 @app.route("/test", methods=("GET", "POST"))
 def test():
     if request.method == "POST":
