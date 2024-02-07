@@ -1,6 +1,6 @@
-Flask==2.2.3
-python-dotenv==0.21.1
-Werkzeug==2.2.2
+Flask
+python-dotenv
+Werkzeug
 Flask-SQLAlchemy
 psycopg2-binary
 Flask-Migrate
