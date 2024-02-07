@@ -6,7 +6,36 @@ app = Flask(__name__)
 # when a request to base url happens (either GET or POST) return the index.html page
 @app.route("/", methods=("GET", "POST"))
 def index():
-    return render_template("index.html")
+    # List of dummy articles
+    articles = [
+        {
+            'title': 'First Article',
+            'author': 'Author One',
+            'summary': 'This is a summary of the first article.',
+            'image_path': 'images/article1.jpg',
+            'publish_date': '2024-02-01',
+            'read_more_link': '#'
+        },
+        {
+            'title': 'Second Article',
+            'author': 'Author Two',
+            'summary': 'This is a summary of the second article.',
+            'image_path': 'images/article2.jpg',
+            'publish_date': '2024-02-02',
+            'read_more_link': '#'
+        },
+        {
+            'title': 'Third Article',
+            'author': 'Author Three',
+            'summary': 'This is a summary of the third article.',
+            'image_path': 'images/article3.jpg',
+            'publish_date': '2024-02-03',
+            'read_more_link': '#'
+        }
+    ]
+
+    # Pass the articles list to the template
+    return render_template('index.html', articles=articles)
 
 # When a request to url /test happens 
 # and if the method is a POST then return a response

@@ -1,12 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}TLDR News{% endblock %}
 
 {% block content %}
 <section class="section">
     <div class="container">
-        <h1 class="title">Hello, Flask!</h1>
-        <p>This is a sample page using Flask with Bulma.</p>
+        <div class="columns is-multiline">
+            {% for article in articles %}
+            <!-- Article Card -->
+            <div class="column is-full">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media">
+                            <!-- Image on the left -->
+                            <div class="media-left">
+                                <figure class="image is-96x96"> <!-- Adjust size as needed -->
+                                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Article image" style="object-fit: cover;">
+                                </figure>
+                            </div>
+                            <!-- Content on the right -->
+                            <div class="media-content">
+                                <p class="title is-4">{{ article.title }}</p>
+                                <p class="subtitle is-6">@{{ article.author }}</p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            {{ article.summary }}
+                            <br>
+                            <time datetime="{{ article.publish_date }}">{{ article.publish_date }}</time>
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <a href="{{ article.read_more_link }}" class="card-footer-item">Read More</a>
+                        <a href="#" class="card-footer-item">Save</a>
+                        <a href="#" class="card-footer-item">Share</a>
+                    </footer>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </section>
 {% endblock %}
