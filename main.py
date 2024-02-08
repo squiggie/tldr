@@ -14,8 +14,6 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# when a request to base url happens (either GET or POST) return the index.html page
-
 
 @app.route("/", methods=("GET", "POST"))
 def index():
