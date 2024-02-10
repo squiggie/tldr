@@ -20,19 +20,19 @@
                             </div>
                             <!-- Content on the right -->
                             <div class="media-content">
-                                <p class="title is-4">{{ article.title }}</p>
-                                <p class="subtitle is-6">@{{ article.author }}</p>
+                                <p class="title is-4">{{ article.data.title }}</p>
+                                <p class="subtitle is-6">by: {{ article.data.author }}</p>
                             </div>
                         </div>
 
                         <div class="content">
-                            {{ article.summary }}
+                            {{ article.data.summary }}
                             <br>
-                            <time datetime="{{ article.publish_date }}">{{ article.publish_date }}</time>
+                            Published: <time datetime="{{ article.data.publish_date }}">{{ article.data.publish_date }}</time>
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ article.read_more_link }}" class="card-footer-item">Read More</a>
+                        <a href="{{ article.data.read_more_link }}" class="card-footer-item">Read More</a>
                         <a href="#" class="card-footer-item">Save</a>
                         <a href="#" class="card-footer-item">Share</a>
                     </footer>
