@@ -1,5 +1,5 @@
 from flask import render_template
-from .models import Article  # Import your models as needed
+from .models import Article
 
 def init_app(app):
     @app.route("/", methods=("GET", "POST"))

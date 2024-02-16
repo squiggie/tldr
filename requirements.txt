@@ -5,3 +5,7 @@ Flask-SQLAlchemy
 psycopg2-binary
 Flask-Migrate
 Gunicorn
+transformers
+newspaper3k
+Flask-APScheduler
+torch

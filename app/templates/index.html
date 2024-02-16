@@ -15,24 +15,24 @@
                             <!-- Image on the left -->
                             <div class="media-left">
                                 <figure class="image is-96x96"> <!-- Adjust size as needed -->
-                                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Article image" style="object-fit: cover;">
+                                    <img src="{{ article.image }}" alt="Article image" style="object-fit: cover;">
                                 </figure>
                             </div>
                             <!-- Content on the right -->
                             <div class="media-content">
-                                <p class="title is-4">{{ article.data.title }}</p>
-                                <p class="subtitle is-6">by: {{ article.data.author }}</p>
+                                <p class="title is-4">{{ article.title.upper() }} </p>
+                                <p class="subtitle is-6">by: {{ article.author }}</p>
                             </div>
                         </div>
 
                         <div class="content">
-                            {{ article.data.summary }}
+                            {{ article.synopsis }}
                             <br>
-                            Published: <time datetime="{{ article.data.publish_date }}">{{ article.data.publish_date }}</time>
+                            Published: <time datetime="{{ article.published_date }}">{{ article.published_date }}</time>
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ article.data.read_more_link }}" class="card-footer-item">Read More</a>
+                        <a href="{{ article.url }}"  target= "_blank" class="card-footer-item">Read More</a>
                         <a href="#" class="card-footer-item">Save</a>
                         <a href="#" class="card-footer-item">Share</a>
                     </footer>
