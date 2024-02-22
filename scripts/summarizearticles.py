@@ -35,14 +35,13 @@ def generate_synopsis(text):
     if len(text) > max_chunk_size:
         text = text[:max_chunk_size]
     
-    summary = summarizer(text, max_length=150, min_length=40, do_sample=False)
-    print(summary)
+    summary = summarizer(text, max_length=1500, min_length=40, do_sample=False)
     return summary[0]['summary_text']
 
 def process_queue():
     with app.app_context():
         # Fetch unprocessed URLs from the queue
-        urls_to_process = ArticleQueue.query.filter_by(processed=False).all()
+        urls_to_process = ArticleQueue.query.filter_by(processed=False).limit(10)
 
         for queue_item in urls_to_process:
             try:
@@ -56,15 +55,14 @@ def process_queue():
                     title=details["title"],
                     author=details["authors"],
                     published_date=details["published_date"] if details["published_date"] else datetime.datetime.now(),
+                    added_date=datetime.datetime.now(),
                     image=details["image"],
-                    synopsis=synopsis
+                    synopsis=synopsis,
+                    category_id=queue_item.category_id
                 )
                 db.session.add(article)
             except Exception as e:
-                # Handle the error: log it, send it to a monitoring system, etc.
                 print(f"Error processing article {queue_item.url}: {e}")
-                # Optionally, mark the article as processed to avoid retrying a failing operation
-                # Or, introduce a 'failed' flag in your model to mark it as failed without reprocessing
 
             finally:
                 # Mark article as processed regardless of success or failure

@@ -1,5 +1,5 @@
 from flask import render_template, jsonify, request
-from .models import Article
+from .models import Article, Category
 
 def init_app(app):
     @app.route("/", methods=("GET", "POST"))
@@ -15,9 +15,10 @@ def init_app(app):
         last_date = article.added_date
         articles = Article.query.filter(Article.added_date > last_date).all()
         dict = [article.as_dict() for article in articles]
-        query = Article.query.filter(Article.added_date > last_date)
-        print(f"Last date: {last_date}")
-        print(str(query))  # or print(query.statement) for the full query
         return jsonify(dict)
 
-            
+    @app.route('/category/<category_name>')
+    def category_page(category_name):
+        category = Category.query.filter_by(name=category_name).first_or_404()
+        articles = Article.query.filter_by(category_id=category.id).all()
+        return render_template('category.html', category=category, articles=articles)

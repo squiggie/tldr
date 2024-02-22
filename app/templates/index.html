@@ -7,28 +7,33 @@
     <div class="container">
         <div class="columns is-multiline">
             {% for article in articles %}
-            <!-- Article Card -->
-            <div id="articles-container" class="column is-full">
+            <div id="article-container" class="column is-full">
                 <div class="card m-1" data-guid="{{ article.guid }}" data-added-date="{{ article.added_date }}">
                     <div class="card-content">
                         <div class="media">
-                            <!-- Image on the left -->
                             <div class="media-left">
-                                <figure class="image is-96x96"> <!-- Adjust size as needed -->
+                                <figure class="image is-96x96"> 
                                     <img src="{{ article.image }}" alt="Article image" style="object-fit: cover;">
                                 </figure>
                             </div>
-                            <!-- Content on the right -->
                             <div class="media-content">
                                 <p class="title is-4">{{ article.title.upper() }} </p>
-                                <p class="subtitle is-6">by: {{ article.author }}</p>
+                                <div class="block">
+                                    {% if article.author %}
+                                        <span class="has-text-weight-medium">Written By:</span> {{ article.author }}
+                                    {% endif %}
+                                    {% if article.published_date %}
+                                        <span class="has-text-weight-medium	">On: </span><time datetime="{{ article.published_date }}">{{ article.published_date }}</time>
+                                    {% endif %}
+                                </div>
+                                {% if article.category %}
+                                        <span class="tag is-link">{{ article.category.name }}</span>
+                                {% endif %}
                             </div>
                         </div>
 
                         <div class="content">
                             {{ article.synopsis }}
-                            <br>
-                            Published: <time datetime="{{ article.published_date }}">{{ article.published_date }}</time>
                         </div>
                     </div>
                     <footer class="card-footer">
