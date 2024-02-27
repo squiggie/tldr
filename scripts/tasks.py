@@ -9,11 +9,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 import time
 import os
+from dotenv import load_dotenv
 
-# Define your base model
 Base = declarative_base()
-
-#app = create_app()
+load_dotenv()
 summarizer = pipeline("summarization", model="Falconsai/text_summarization")
 
 categories = {
@@ -26,16 +25,12 @@ categories = {
     'Crypto':'https://news.google.com/rss/topics/CAAqJAgKIh5DQkFTRUFvS0wyMHZNSFp3YWpSZlloSUNaVzRvQUFQAQ?hl=en-US&gl=US&ceid=US:en'
 }
 
-#Category.articles = relationship("ArticleQueue", order_by=ArticleQueue.guid, back_populates="category")
-
 if os.getenv('FLASK_ENV') == 'development':
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('DEVELOPMENT_DATABASE_URI')
+    DATABASE_URI = os.getenv('DEVELOPMENT_DATABASE_URI')
 else:
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.getenv('PRODUCTION_DATABASE_URI')
-
-DATABASE_URI = "postgresql://tldr_user:2jWKemKP6FeyiGv2bowfDbkjrEQ3Flsz@dpg-cn2ej10l6cac739cv510-a.oregon-postgres.render.com/tldr"
+    DATABASE_URI = os.getenv('PRODUCTION_DATABASE_URI')
 
 # Set up the engine
 engine = create_engine(DATABASE_URI)
