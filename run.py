@@ -9,9 +9,6 @@ def inject_categories():
     categories = Category.query.all()
     return dict(categories=categories)
 
-
-app = create_app()
-
 @app.template_filter('datetimefmt')
 def datetimefmt_filter(value, formats=None):
     """A custom Jinja filter to format datetime objects or strings with multiple possible formats."""

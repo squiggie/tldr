@@ -24,7 +24,7 @@
                                         <span class="has-text-weight-medium">Written By:</span> {{ article.author }}
                                     {% endif %}
                                     {% if article.published_date %}
-                                        <span class="has-text-weight-medium">On: </span><time datetime="{{ article.published_date }}">{{ article.published_date }}</time>
+                                        <span class="has-text-weight-medium">On: </span><time datetime="{{ article.published_date }}">{{ article.published_date|datetimefmt }}</time>
                                     {% endif %}
                                 </div>
                             </div>
