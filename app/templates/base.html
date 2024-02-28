@@ -24,7 +24,7 @@
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
                     <a class="navbar-item" href="{{ url_for('index') }}">Home</a>
-                    <a class="navbar-item">Latest</a>
+                    <!--<a class="navbar-item">Latest</a>-->
                 </div>
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
@@ -32,25 +32,12 @@
                     </a>
             
                     <div class="navbar-dropdown">
-                      <a class="navbar-item">
-                        Business
-                      </a>
-                      <a class="navbar-item">
-                        Tech
-                      </a>
-                      <a class="navbar-item">
-                        Entertainment
-                      </a>
-                      <a class="navbar-item">
-                        Sports
-                      </a>
-                      <a class="navbar-item">
-                        Science
-                      </a>
-                      <a class="navbar-item">
-                        Health
-                      </a>
-                    </div>
+                        {% for category in categories %}
+                          <a class="navbar-item" href="{{ url_for('category_page', category_name=category.name) }}">
+                            {{ category.name }}
+                          </a>
+                        {% endfor %}
+                      </div>
                   </div>
 
                 <div class="navbar-end">
