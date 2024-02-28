@@ -5,7 +5,24 @@
 {% block content %}
 <section class="section">
     <div class="container">
-        <h1 class="title">{{ category.name }} Articles</h1>
+        <div class="columns is-multiline is-mobile">
+            <div class="column">
+                <h1 class="title">{{ category.name }}</h1>
+              </div>
+            <div class="column is-one-quarter">
+                <div class="select is-rounded">
+                    <form method="GET" action="{{ url_for('category_page', category_name=category.name) }}">
+                        <select name="per_page" onchange="this.form.submit()">
+                            <option value="" selected disabled>Items Per Page</option>
+                            <option value="5" {% if pagination.per_page == 5 %}selected{% endif %}>5</option>
+                            <option value="10" {% if pagination.per_page == 10 %}selected{% endif %}>10</option>
+                            <option value="20" {% if pagination.per_page == 20 %}selected{% endif %}>20</option>
+                            <option value="50" {% if pagination.per_page == 50 %}selected{% endif %}>50</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+          </div>
         <div class="columns is-multiline">
             {% for article in articles %}
             <div id="article-container" class="column is-full">
@@ -35,12 +52,32 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <a href="{{ article.url }}" target="_blank" class="card-footer-item">Read More</a>
+                        <a href="{{ article.url }}"  target= "_blank" class="card-footer-item">Read More</a>
+                        <a href="#" class="card-footer-item">Save</a>
+                        <a href="#" class="card-footer-item">Share</a>
                     </footer>
                 </div>
             </div>
             {% endfor %}
         </div>
+        <!-- Pagination Controls -->
+        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+            {% if pagination.has_prev %}
+                <a class="pagination-previous" href="{{ url_for('category_page', category_name=category.name, page=pagination.prev_num, per_page=pagination.per_page) }}">Previous</a>
+            {% endif %}
+            {% if pagination.has_next %}
+                <a class="pagination-next" href="{{ url_for('category_page', category_name=category.name, page=pagination.next_num, per_page=pagination.per_page) }}">Next</a>
+            {% endif %}
+            <ul class="pagination-list">
+                {% for page in pagination.iter_pages() %}
+                <li>
+                    <a class="pagination-link{% if page == pagination.page %} is-current{% endif %}" href="{{ url_for('category_page', category_name=category.name, page=page) }}">
+                        {{ page }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
     </div>
 </section>
 {% endblock %}

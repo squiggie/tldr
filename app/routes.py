@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, session
 from .models import Article, Category
 
 def init_app(app):
@@ -19,6 +19,9 @@ def init_app(app):
 
     @app.route('/category/<category_name>')
     def category_page(category_name):
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', session.get('per_page', 10), type=int)
+        session['per_page'] = per_page
         category = Category.query.filter_by(name=category_name).first_or_404()
-        articles = Article.query.filter_by(category_id=category.id).all()
-        return render_template('category.html', category=category, articles=articles)
+        articles = Article.query.filter_by(category_id=category.id).paginate(page=page, per_page=per_page, error_out=False)
+        return render_template('category.html', category=category, articles=articles.items, pagination=articles)
