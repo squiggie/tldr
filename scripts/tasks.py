@@ -9,11 +9,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 import time
 import os
+from dotenv import load_dotenv
 
-# Define your base model
 Base = declarative_base()
-
-#app = create_app()
+load_dotenv()
 summarizer = pipeline("summarization", model="Falconsai/text_summarization")
 
 categories = {
@@ -26,16 +25,12 @@ categories = {
     'Crypto':'https://news.google.com/rss/topics/CAAqJAgKIh5DQkFTRUFvS0wyMHZNSFp3YWpSZlloSUNaVzRvQUFQAQ?hl=en-US&gl=US&ceid=US:en'
 }
 
-#Category.articles = relationship("ArticleQueue", order_by=ArticleQueue.guid, back_populates="category")
-
 if os.getenv('FLASK_ENV') == 'development':
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv('DEVELOPMENT_DATABASE_URI')
+    DATABASE_URI = os.getenv('DEVELOPMENT_DATABASE_URI')
 else:
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.getenv('PRODUCTION_DATABASE_URI')
-
-DATABASE_URI = "postgresql://tldr_user:2jWKemKP6FeyiGv2bowfDbkjrEQ3Flsz@dpg-cn2ej10l6cac739cv510-a.oregon-postgres.render.com/tldr"
+    DATABASE_URI = os.getenv('PRODUCTION_DATABASE_URI')
 
 # Set up the engine
 engine = create_engine(DATABASE_URI)
@@ -84,14 +79,32 @@ def fetch_article_details(url):
         "text": article.text
     }
 
-def generate_synopsis(text):
-    # Ensure the text is not too long for the model
+def is_meaningful(summary_text, min_alphanumeric=5):
+    """
+    Checks if the summary text is meaningful based on the presence of alphanumeric characters.
+    Adjust `min_alphanumeric` based on your criteria for meaningful content.
+    """
+    alphanumeric_count = len(re.findall(r'\w', summary_text))
+    return alphanumeric_count >= min_alphanumeric
+
+def generate_synopsis(text, max_attempts=3):
     max_chunk_size = 1024  # Adjust based on the model's max input size
-    if len(text) > max_chunk_size:
-        text = text[:max_chunk_size]
-    
-    summary = summarizer(text, max_length=1500, min_length=40, do_sample=False)
-    return summary[0]['summary_text']
+    attempts = 0
+
+    while attempts < max_attempts:
+        if len(text) > max_chunk_size:
+            text = text[:max_chunk_size]
+
+        summary = summarizer(text, max_length=1500, min_length=40, do_sample=False)
+        summary_text = summary[0]['summary_text']
+
+        if is_meaningful(summary_text):
+            return summary_text
+        else:
+            attempts += 1
+
+    # If all attempts fail, return a default message or handle it as needed
+    return "Unable to generate a meaningful summary after several attempts."
 
 def process_queue():
     # Create a new session
