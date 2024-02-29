@@ -2,13 +2,13 @@ from flask import Flask
 from config import Config, DevelopmentConfig, ProductionConfig
 from extensions import db, migrate
 import os
+from app import routes
 
 def create_app(config_class=Config):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(config_class)
     app.config.from_pyfile('config.py', silent=True)
 
-    from app import models, routes
     routes.init_app(app)
 
     if os.getenv('FLASK_ENV') == 'production':
