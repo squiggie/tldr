@@ -11,3 +11,4 @@ Flask-APScheduler
 torch
 Flask-WTF
 Flask-Login
+email_validator
