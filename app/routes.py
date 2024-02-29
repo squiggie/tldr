@@ -1,14 +1,10 @@
 from flask import render_template, jsonify, request, session, flash, redirect, url_for
-from flask_login import current_user, login_required
 from .forms import SignupForm, LoginForm
 from .models import Article, Category, User
 from extensions import db
-from flask_login import login_user, login_required, logout_user
-from flask_login import LoginManager
+from flask_login import login_user, login_required, logout_user, LoginManager, current_user, login_required
 
 def init_app(app):
-    login_manager = LoginManager(app)
-
     @app.route("/", methods=("GET", "POST"))
     def index():
         # Retrieve the latest 100 articles from the database
@@ -30,7 +26,7 @@ def init_app(app):
         per_page = request.args.get('per_page', session.get('per_page', 10), type=int)
         session['per_page'] = per_page
         category = Category.query.filter_by(name=category_name).first_or_404()
-        articles = Article.query.filter_by(category_id=category.id).paginate(page=page, per_page=per_page, error_out=False)
+        articles = Article.query.filter_by(category_id=category.id).order_by(Article.added_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
         return render_template('category.html', category=category, articles=articles.items, pagination=articles)
     
     @app.route('/signup', methods=['GET', 'POST'])
@@ -49,15 +45,6 @@ def init_app(app):
     def logout():
         logout_user()
         return redirect(url_for('index'))
-
-    @app.route('/protected')
-    @login_required
-    def protected():
-        return 'This is a protected view.'
-    
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.get(user_id)
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
