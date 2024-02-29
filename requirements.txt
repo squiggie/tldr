@@ -10,3 +10,4 @@ newspaper3k
 Flask-APScheduler
 torch
 Flask-WTF
+Flask-Login
