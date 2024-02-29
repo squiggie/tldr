@@ -1,4 +1,11 @@
 from extensions import db
+from werkzeug.security import generate_password_hash
+
+# Association tables
+favorites = db.Table('favorites',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('article_guid', db.String, db.ForeignKey('article.guid'), primary_key=True)
+)
 
 class Article(db.Model):
     guid = db.Column(db.String, unique=True, nullable=False, primary_key=True)
@@ -30,3 +37,17 @@ class Category(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    # Relationship to define favorites
+    favorite_articles = db.relationship('Article', secondary=favorites, backref=db.backref('liked_by', lazy='dynamic'))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def __repr__(self):
+        return '<User %r>' % self.username

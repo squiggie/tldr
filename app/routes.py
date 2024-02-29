@@ -1,5 +1,7 @@
-from flask import render_template, jsonify, request, session
-from .models import Article, Category
+from flask import render_template, jsonify, request, session, flash, redirect, url_for
+from .forms import SignupForm
+from .models import Article, Category, User
+from extensions import db
 
 def init_app(app):
     @app.route("/", methods=("GET", "POST"))
@@ -25,3 +27,15 @@ def init_app(app):
         category = Category.query.filter_by(name=category_name).first_or_404()
         articles = Article.query.filter_by(category_id=category.id).paginate(page=page, per_page=per_page, error_out=False)
         return render_template('category.html', category=category, articles=articles.items, pagination=articles)
+    
+    @app.route('/signup', methods=['GET', 'POST'])
+    def signup():
+        form = SignupForm()
+        if form.validate_on_submit():
+            user = User(username=form.username.data, email=form.email.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!')
+            return redirect(url_for('login'))  # Redirect to the login page after successful signup
+        return render_template('signup.html', title='Sign Up', form=form)
