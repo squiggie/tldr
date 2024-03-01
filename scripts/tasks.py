@@ -6,10 +6,11 @@ import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker
 import time
 import os
 from dotenv import load_dotenv
+import re
 
 Base = declarative_base()
 load_dotenv()
