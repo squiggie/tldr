@@ -53,17 +53,17 @@ def fetch_and_store_articles():
             session.add(category)
             session.commit()
         for entry in feed.entries:
-            exists = session.query(ArticleQueue).filter_by(guid=entry.guid).first() is not None
+            exists = session.query(ArticleQueue).filter_by(id=entry.id).first() is not None
             if not exists:
-                article = ArticleQueue(url=entry.link, processed=False, guid=entry.guid, category_id=category.id)
+                article = ArticleQueue(url=entry.link, processed=False, id=entry.id, category_id=category.id)
                 session.add(article)        
         session.commit()
 
 
-def mark_article_as_processed(guid):
+def mark_article_as_processed(id):
     # Create a new session
     session = Session()
-    article = session.query(ArticleQueue).get(guid)
+    article = session.query(ArticleQueue).get(id)
     if article:
         article.processed = True
         session.commit()
@@ -120,7 +120,7 @@ def process_queue():
 
             # Create and save the article with its synopsis
             article = Article(
-                guid=queue_item.guid,
+                id=queue_item.id,
                 url=queue_item.url,
                 title=details["title"],
                 author=details["authors"],

@@ -5,11 +5,11 @@ from flask_login import UserMixin
 # Association tables
 favorites = db.Table('favorites',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('article_guid', db.String, db.ForeignKey('article.guid'), primary_key=True)
+    db.Column('article_id', db.String, db.ForeignKey('article.id'), primary_key=True)
 )
 
 class Article(db.Model):
-    guid = db.Column(db.String, unique=True, nullable=False, primary_key=True)
+    id = db.Column(db.String, unique=True, nullable=False, primary_key=True)
     title = db.Column(db.String, nullable=False)
     author = db.Column(db.String, nullable=False)
     published_date = db.Column(db.String, nullable=False)
@@ -25,7 +25,7 @@ class Article(db.Model):
 class ArticleQueue(db.Model):
     url = db.Column(db.String, unique=True, nullable=False)
     processed = db.Column(db.Boolean, default=False, nullable=False)
-    guid = db.Column(db.String, unique=True, nullable=False, primary_key=True)
+    id = db.Column(db.String, unique=True, nullable=False, primary_key=True)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     
     def as_dict(self):

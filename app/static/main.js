@@ -5,6 +5,13 @@ $(document).ready( function () {
         contentType: "application/json; charset=utf-8"
     });
 
+    function deleteNotification(element) {
+        // Get the parent of the element, which is the notification div
+        var notification = element.parentNode;
+        // Remove the notification
+        notification.parentNode.removeChild(notification);
+    }
+
     /* setInterval(updateArticles, 30000);
 
     async function updateArticles() {
@@ -22,14 +29,14 @@ $(document).ready( function () {
         });
         
         // Query the API for new articles since the last one
-        const response = await fetch(`/articles/newest?guid=${latestArticleCard.getAttribute('data-guid')}`);
+        const response = await fetch(`/articles/newest?id=${latestArticleCard.getAttribute('data-id')}`);
         const data = await response.json();
         
         // Append the new articles to the page
         data.forEach(article => {
           const articleHTML = `
             <div id="article-container" class="column is-full">
-                <div class="card m-1" data-guid="${article.guid}" data-added-date="${article.added_date}">
+                <div class="card m-1" data-id="${article.id}" data-added-date="${article.added_date}">
                     <div class="card-content">
                         <div class="media">
                             <div class="media-left">
