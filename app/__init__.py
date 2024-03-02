@@ -11,16 +11,13 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     app.config.from_pyfile('config.py', silent=True)
 
-    print("Loading Login Manager")
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'login'
 
     @login_manager.user_loader
     def load_user(user_id):
-        print('Loading user:', user_id)
         user = User.query.get(int(user_id))
-        print('Loaded user:', user)
         return user
 
     routes.init_app(app)
