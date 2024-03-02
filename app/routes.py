@@ -12,8 +12,8 @@ def init_app(app):
         session['per_page'] = per_page
         articles = Article.query.order_by(Article.added_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
         if current_user.is_authenticated:
-            favorite_articles = [article.id for article in current_user.favorite_articles]
-            return render_template('index.html', articles=articles, pagination=articles, favorite_articles=favorite_articles)
+            favorite_article_ids = [article.id for article in current_user.favorite_articles]
+            return render_template('index.html', articles=articles, pagination=articles, favorite_article_ids=favorite_article_ids)
         return render_template('index.html', articles=articles, pagination=articles)
 
     
@@ -34,8 +34,8 @@ def init_app(app):
         category = Category.query.filter_by(name=category_name).first_or_404()
         articles = Article.query.filter_by(category_id=category.id).order_by(Article.added_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
         if current_user.is_authenticated:
-            favorite_articles = [article.id for article in current_user.favorite_articles]
-            return render_template('category.html', category=category, articles=articles.items, pagination=articles, favorite_articles=favorite_articles)
+            favorite_article_ids = [article.id for article in current_user.favorite_articles]
+            return render_template('category.html', category=category, articles=articles.items, pagination=articles, favorite_article_ids=favorite_article_ids)
         return render_template('category.html', category=category, articles=articles.items, pagination=articles)
 
     
