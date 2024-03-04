@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}{{ category.name }}{% endblock %}
+{% block title %}Saved{% endblock %}
 
 {% block content %}
 <section class="section">
     <div class="container">
         <div class="columns is-multiline is-mobile">
             <div class="column">
-                <h1 class="title">{{ category.name }}</h1>
+                <h1 class="title">Saved Articles</h1>
               </div>
             <div class="column is-one-quarter">
                 <div class="select is-rounded">
-                    <form method="GET" action="{{ url_for('category_page', category_name=category.name) }}">
+                    <form method="GET" action="{{ url_for('saved_articles')}}">
                         <select name="per_page" onchange="this.form.submit()">
                             <option value="" selected disabled>Items Per Page</option>
                             <option value="5" {% if pagination.per_page == 5 %}selected{% endif %}>5</option>
@@ -73,15 +73,15 @@
         <!-- Pagination Controls -->
         <nav class="pagination is-centered" role="navigation" aria-label="pagination">
             {% if pagination.has_prev %}
-                <a class="pagination-previous" href="{{ url_for('category_page', category_name=category.name, page=pagination.prev_num, per_page=pagination.per_page) }}">Previous</a>
+                <a class="pagination-previous" href="{{ url_for('saved_articles', page=pagination.prev_num, per_page=pagination.per_page) }}">Previous</a>
             {% endif %}
             {% if pagination.has_next %}
-                <a class="pagination-next" href="{{ url_for('category_page', category_name=category.name, page=pagination.next_num, per_page=pagination.per_page) }}">Next</a>
+                <a class="pagination-next" href="{{ url_for('saved_articles', page=pagination.next_num, per_page=pagination.per_page) }}">Next</a>
             {% endif %}
             <ul class="pagination-list">
                 {% for page in pagination.iter_pages() %}
                 <li>
-                    <a class="pagination-link{% if page == pagination.page %} is-current{% endif %}" href="{{ url_for('category_page', category_name=category.name, page=page) }}">
+                    <a class="pagination-link{% if page == pagination.page %} is-current{% endif %}" href="{{ url_for('saved_articles', page=page) }}">
                         {{ page }}
                     </a>
                 </li>
